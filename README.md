@@ -73,7 +73,7 @@ Design a database system that supports:
 - Use triggers to record audit logs
 
 **Example Trigger:**
-```sql
+```bash
 CREATE OR REPLACE TRIGGER trg_exam_submission
 AFTER INSERT ON Submissions
 FOR EACH ROW
@@ -81,3 +81,4 @@ BEGIN
   INSERT INTO Audit_Log (Action, Timestamp, UserID)
   VALUES ('Exam Submitted', SYSDATE, :NEW.StudentID);
 END;
+```
