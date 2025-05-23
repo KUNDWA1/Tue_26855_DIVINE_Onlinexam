@@ -118,7 +118,9 @@ flowchart TD
 ---
 
 ## 💾 Database Creation & Implementation
+![image](https://github.com/user-attachments/assets/cbabbc39-05de-4084-a42b-d8e25302326f)
 ![Uploading image.png…]()
+
 
 
 ### 🛠️ Database User Setup
