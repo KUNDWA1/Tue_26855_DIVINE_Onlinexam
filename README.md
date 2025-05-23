@@ -137,210 +137,26 @@ flowchart TD
 ### 📊 Sample Data Insertion
 
 ```sql
--- Insert sample instructors
-INSERT INTO Instructor VALUES (1, 'Eric Maniraguha', 'eric.maniraguha@auca.ac.rw', 'instructor123');
-INSERT INTO Instructor VALUES (2, 'Jane Smith', 'jane.smith@auca.ac.rw', 'instructor456');
 
--- Insert sample students
-INSERT INTO Student VALUES (1, 'Divine Mutuyimana', 'divine.mutuyimana@student.auca.ac.rw', 'student123', 'Computer Science');
-INSERT INTO Student VALUES (2, 'Alice Johnson', 'alice.johnson@student.auca.ac.rw', 'student456', 'Information Technology');
-
--- Insert sample exam
-INSERT INTO Exam VALUES (1, 'Database Systems Final', 'Database Management', 
-                        TIMESTAMP '2025-05-25 09:00:00', 
-                        TIMESTAMP '2025-05-25 11:00:00', 1);
-
--- Insert sample questions
-INSERT INTO Question VALUES (1, 1, 'What is normalization in database design?', 'MCQ', 10);
-INSERT INTO Question VALUES (2, 1, 'Explain the ACID properties of transactions.', 'Essay', 15);
-
--- Insert answer options for MCQ
-INSERT INTO AnswerOption VALUES (1, 1, 'A process to eliminate data redundancy', 1);
-INSERT INTO AnswerOption VALUES (2, 1, 'A process to increase data redundancy', 0);
-INSERT INTO AnswerOption VALUES (3, 1, 'A process to delete data', 0);
-INSERT INTO AnswerOption VALUES (4, 1, 'A process to backup data', 0);
-```
-
----
 
 ## 🔧 Phase VII: Database Interactions & Procedures
 
 ### 📝 Stored Procedures
 
 #### 🔐 Student Registration Procedure
-```sql
-CREATE OR REPLACE PROCEDURE RegisterStudent (
-    p_student_id IN NUMBER,
-    p_full_name IN VARCHAR2,
-    p_email IN VARCHAR2,
-    p_password IN VARCHAR2,
-    p_program IN VARCHAR2
-) AS
-BEGIN
-    INSERT INTO Student (StudentID, FullName, Email, Password, Program)
-    VALUES (p_student_id, p_full_name, p_email, p_password, p_program);
-    
-    -- Log the registration
-    INSERT INTO AuditLog (UserID, UserType, Action, TableName, Status)
-    VALUES (p_student_id, 'Student', 'REGISTER', 'Student', 'SUCCESS');
-    
-    COMMIT;
-    DBMS_OUTPUT.PUT_LINE('Student registered successfully: ' || p_full_name);
-EXCEPTION
-    WHEN DUP_VAL_ON_INDEX THEN
-        ROLLBACK;
-        DBMS_OUTPUT.PUT_LINE('Error: Email already exists');
-    WHEN OTHERS THEN
-        ROLLBACK;
-        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
-END;
-/
-```
+`
 
 #### 📊 Calculate Exam Score Function
 ```sql
-CREATE OR REPLACE FUNCTION CalculateExamScore (
-    p_student_id IN NUMBER,
-    p_exam_id IN NUMBER
-) RETURN NUMBER IS
-    v_total_score NUMBER := 0;
-    v_question_score NUMBER;
-    
-    CURSOR question_cursor IS
-        SELECT q.QuestionID, q.Marks, q.QuestionType
-        FROM Question q
-        WHERE q.ExamID = p_exam_id;
-BEGIN
-    FOR question_rec IN question_cursor LOOP
-        v_question_score := 0;
-        
-        IF question_rec.QuestionType = 'MCQ' THEN
-            -- Check if the selected answer is correct
-            SELECT CASE 
-                WHEN ao.IsCorrect = 1 THEN question_rec.Marks 
-                ELSE 0 
-            END INTO v_question_score
-            FROM StudentAnswer sa
-            JOIN AnswerOption ao ON sa.OptionID = ao.OptionID
-            WHERE sa.StudentID = p_student_id 
-            AND sa.QuestionID = question_rec.QuestionID;
-        ELSE
-            -- For essay questions, assume manual grading (placeholder)
-            v_question_score := question_rec.Marks * 0.8; -- 80% default
-        END IF;
-        
-        v_total_score := v_total_score + v_question_score;
-    END LOOP;
-    
-    RETURN v_total_score;
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        RETURN 0;
-    WHEN OTHERS THEN
-        DBMS_OUTPUT.PUT_LINE('Error calculating score: ' || SQLERRM);
-        RETURN 0;
-END;
-/
-```
+
 
 #### 📋 Submit Exam Procedure
-```sql
-CREATE OR REPLACE PROCEDURE SubmitExam (
-    p_student_id IN NUMBER,
-    p_exam_id IN NUMBER
-) AS
-    v_score NUMBER;
-    v_result_id NUMBER;
-BEGIN
-    -- Calculate the score
-    v_score := CalculateExamScore(p_student_id, p_exam_id);
-    
-    -- Generate result ID
-    SELECT NVL(MAX(ResultID), 0) + 1 INTO v_result_id FROM Result;
-    
-    -- Insert result
-    INSERT INTO Result (ResultID, StudentID, ExamID, Score, SubmittedAt)
-    VALUES (v_result_id, p_student_id, p_exam_id, v_score, CURRENT_TIMESTAMP);
-    
-    -- Log the submission
-    INSERT INTO AuditLog (UserID, UserType, Action, TableName, Status)
-    VALUES (p_student_id, 'Student', 'SUBMIT_EXAM', 'Result', 'SUCCESS');
-    
-    COMMIT;
-    DBMS_OUTPUT.PUT_LINE('Exam submitted successfully. Score: ' || v_score);
-EXCEPTION
-    WHEN OTHERS THEN
-        ROLLBACK;
-        DBMS_OUTPUT.PUT_LINE('Error submitting exam: ' || SQLERRM);
-END;
-/
-```
+`
 
 ### 📦 Package Implementation
 
-```sql
-CREATE OR REPLACE PACKAGE ExamManagement AS
-    -- Package specification
-    PROCEDURE CreateExam(p_exam_id NUMBER, p_title VARCHAR2, p_subject VARCHAR2, 
-                        p_start_time TIMESTAMP, p_end_time TIMESTAMP, p_instructor_id NUMBER);
-    FUNCTION GetStudentResults(p_student_id NUMBER) RETURN SYS_REFCURSOR;
-    PROCEDURE GenerateExamReport(p_exam_id NUMBER);
-END ExamManagement;
-/
 
-CREATE OR REPLACE PACKAGE BODY ExamManagement AS
-    PROCEDURE CreateExam(p_exam_id NUMBER, p_title VARCHAR2, p_subject VARCHAR2, 
-                        p_start_time TIMESTAMP, p_end_time TIMESTAMP, p_instructor_id NUMBER) IS
-    BEGIN
-        INSERT INTO Exam VALUES (p_exam_id, p_title, p_subject, p_start_time, p_end_time, p_instructor_id);
         
-        INSERT INTO AuditLog (UserID, UserType, Action, TableName, Status)
-        VALUES (p_instructor_id, 'Instructor', 'CREATE_EXAM', 'Exam', 'SUCCESS');
-        
-        COMMIT;
-        DBMS_OUTPUT.PUT_LINE('Exam created successfully: ' || p_title);
-    EXCEPTION
-        WHEN OTHERS THEN
-            ROLLBACK;
-            DBMS_OUTPUT.PUT_LINE('Error creating exam: ' || SQLERRM);
-    END;
-    
-    FUNCTION GetStudentResults(p_student_id NUMBER) RETURN SYS_REFCURSOR IS
-        result_cursor SYS_REFCURSOR;
-    BEGIN
-        OPEN result_cursor FOR
-            SELECT e.Title, e.Subject, r.Score, r.SubmittedAt,
-                   RANK() OVER (PARTITION BY r.ExamID ORDER BY r.Score DESC) as Rank
-            FROM Result r
-            JOIN Exam e ON r.ExamID = e.ExamID
-            WHERE r.StudentID = p_student_id
-            ORDER BY r.SubmittedAt DESC;
-        
-        RETURN result_cursor;
-    END;
-    
-    PROCEDURE GenerateExamReport(p_exam_id NUMBER) IS
-        v_avg_score NUMBER;
-        v_max_score NUMBER;
-        v_min_score NUMBER;
-        v_total_students NUMBER;
-    BEGIN
-        SELECT AVG(Score), MAX(Score), MIN(Score), COUNT(*)
-        INTO v_avg_score, v_max_score, v_min_score, v_total_students
-        FROM Result
-        WHERE ExamID = p_exam_id;
-        
-        DBMS_OUTPUT.PUT_LINE('=== EXAM REPORT ===');
-        DBMS_OUTPUT.PUT_LINE('Total Students: ' || v_total_students);
-        DBMS_OUTPUT.PUT_LINE('Average Score: ' || ROUND(v_avg_score, 2));
-        DBMS_OUTPUT.PUT_LINE('Highest Score: ' || v_max_score);
-        DBMS_OUTPUT.PUT_LINE('Lowest Score: ' || v_min_score);
-    END;
-END ExamManagement;
-/
-```
-
----
 
 ## 🔐 Phase VIII: Advanced Database Programming & Security
 
