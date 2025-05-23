@@ -119,7 +119,7 @@ flowchart TD
 
 ## 💾 Database Creation & Implementation
 ![image](https://github.com/user-attachments/assets/cbabbc39-05de-4084-a42b-d8e25302326f)
-![Uploading image.png…]()
+![image](https://github.com/user-attachments/assets/c2c7c3f4-e29a-4025-b5eb-92f4a2a0514c)
 
 
 
@@ -129,38 +129,8 @@ flowchart TD
 ---
 
 ## 🏗️ Phase V: Table Implementation
-
-### 👨‍🎓 Student Table
-l
-
-```
-
-### 👨‍🏫 Instructor Table
-
-
-
-### 📝 Exam Table
-
-
-
-
-### ❓ Question Table
-```sql
-
-
-
-### 📊 Answer Option Table
-
-
-### ✍️ Student Answer Table
-
-
-### 🏆 Result Table
-
-
-
-### 📋 Audit Log Table
-
+# Table creation 
+![Uploading image.png…]()
 
 ## 🔄 Phase VI: Data Population & Testing
 
