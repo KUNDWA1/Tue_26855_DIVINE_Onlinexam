@@ -131,106 +131,36 @@ flowchart TD
 ## 🏗️ Phase V: Table Implementation
 
 ### 👨‍🎓 Student Table
-```sql
-CREATE TABLE Student (
-    StudentID NUMBER PRIMARY KEY,
-    FullName VARCHAR2(100) NOT NULL,
-    Email VARCHAR2(100) UNIQUE NOT NULL,
-    Password VARCHAR2(100) NOT NULL,
-    Program VARCHAR2(50) NOT NULL
-);
+l
+
 ```
 
 ### 👨‍🏫 Instructor Table
-```sql
-CREATE TABLE Instructor (
-    InstructorID NUMBER PRIMARY KEY,
-    FullName VARCHAR2(100) NOT NULL,
-    Email VARCHAR2(100) UNIQUE NOT NULL,
-    Password VARCHAR2(100) NOT NULL
-);
-```
+
+
 
 ### 📝 Exam Table
-```sql
-CREATE TABLE Exam (
-    ExamID NUMBER PRIMARY KEY,
-    Title VARCHAR2(100) NOT NULL,
-    Subject VARCHAR2(100) NOT NULL,
-    StartTime TIMESTAMP NOT NULL,
-    EndTime TIMESTAMP NOT NULL,
-    InstructorID NUMBER NOT NULL,
-    FOREIGN KEY (InstructorID) REFERENCES Instructor(InstructorID),
-    CHECK (EndTime > StartTime)
-);
-```
+
+
+
 
 ### ❓ Question Table
 ```sql
-CREATE TABLE Question (
-    QuestionID NUMBER PRIMARY KEY,
-    ExamID NUMBER NOT NULL,
-    QuestionText VARCHAR2(4000) NOT NULL,
-    QuestionType VARCHAR2(20) NOT NULL CHECK (QuestionType IN ('MCQ', 'Essay')),
-    Marks NUMBER NOT NULL CHECK (Marks >= 0),
-    FOREIGN KEY (ExamID) REFERENCES Exam(ExamID)
-);
-```
+
+
 
 ### 📊 Answer Option Table
-```sql
-CREATE TABLE AnswerOption (
-    OptionID NUMBER PRIMARY KEY,
-    QuestionID NUMBER NOT NULL,
-    OptionText VARCHAR2(1000) NOT NULL,
-    IsCorrect NUMBER(1) DEFAULT 0 NOT NULL, -- 0 = FALSE, 1 = TRUE
-    FOREIGN KEY (QuestionID) REFERENCES Question(QuestionID)
-);
-```
+
 
 ### ✍️ Student Answer Table
-```sql
-CREATE TABLE StudentAnswer (
-    StudentID NUMBER NOT NULL,
-    QuestionID NUMBER NOT NULL,
-    OptionID NUMBER,
-    AnswerText VARCHAR2(4000),
-    AnsweredAt TIMESTAMP NOT NULL,
-    PRIMARY KEY (StudentID, QuestionID),
-    FOREIGN KEY (StudentID) REFERENCES Student(StudentID),
-    FOREIGN KEY (QuestionID) REFERENCES Question(QuestionID),
-    FOREIGN KEY (OptionID) REFERENCES AnswerOption(OptionID)
-);
-```
+
 
 ### 🏆 Result Table
-```sql
-CREATE TABLE Result (
-    ResultID NUMBER PRIMARY KEY,
-    StudentID NUMBER NOT NULL,
-    ExamID NUMBER NOT NULL,
-    Score NUMBER(5,2) NOT NULL CHECK (Score >= 0),
-    SubmittedAt TIMESTAMP NOT NULL,
-    FOREIGN KEY (StudentID) REFERENCES Student(StudentID),
-    FOREIGN KEY (ExamID) REFERENCES Exam(ExamID)
-);
-```
+
+
 
 ### 📋 Audit Log Table
-```sql
-CREATE TABLE AuditLog (
-    LogID NUMBER PRIMARY KEY,
-    UserID NUMBER,
-    UserType VARCHAR2(20), -- 'Student', 'Instructor', 'Admin'
-    Action VARCHAR2(100),
-    TableName VARCHAR2(50),
-    Timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    IPAddress VARCHAR2(45),
-    Status VARCHAR2(20) -- 'SUCCESS', 'FAILED', 'BLOCKED'
-);
-```
 
----
 
 ## 🔄 Phase VI: Data Population & Testing
 
