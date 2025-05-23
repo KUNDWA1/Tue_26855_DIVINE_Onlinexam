@@ -748,7 +748,7 @@ OnlineExaminationSystem/
 - **Name**: Divine Mutuyimana
 - **Student ID**: 26855
 - **Email**: kundwadevine@gmail.com
-- **GitHub**: [Project Repository]()
+- **GitHub**: [Project Repository](Tue_26855_DIVINE_Onlinexam)
 
 ### 🏫 Academic Information
 - **Institution**: Adventist University of Central Africa (AUCA)
