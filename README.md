@@ -5,22 +5,10 @@
 
 ---
 
-## 📋 Project Information
 
-| **Field** | **Details** |
-|-----------|-------------|
-| **Student Name** | Divine Mutuyimana |
-| **Student ID** | 26855 |
-| **Group** | TUE GRP B |
-| **Course** | Database Development with PL/SQL (INSY 8311) |
-| **Instructor** | Eric Maniraguha |
-| **Academic Year** | 2024-2025 |
-| **Database Name** | `Tue_26855_DIVINE_Online_Examination_MS` |
-| **Password** | `Divine` |
 
----
 
-## 🎯 Phase I: Problem Statement & Objectives
+## 🎯Problem Statement & Objectives
 
 ### 📌 Problem Definition
 Educational institutions face significant challenges in conducting fair, secure, and efficient examinations. Traditional paper-based systems are prone to errors, security breaches, and administrative overhead. There's a critical need for a digital solution that can:
@@ -45,7 +33,7 @@ Educational institutions face significant challenges in conducting fair, secure,
 
 ---
 
-## 🔄 Phase II: Business Process Modeling (MIS Integration)
+##  Business Process Modeling (MIS Integration)
 
 ### 📊 Business Process Flow
 
@@ -82,7 +70,7 @@ flowchart TD
 
 ---
 
-## 🗄️ Phase III: Logical Model Design
+## 🗄️ Logical Model Design
 
 ### 📐 Entity-Relationship Diagram
 
@@ -129,19 +117,10 @@ flowchart TD
 
 ---
 
-## 💾 Phase IV: Database Creation & Implementation
+## 💾 Database Creation & Implementation
 
 ### 🛠️ Database User Setup
 
-```sql
--- Create database user with appropriate privileges
-CREATE USER Tue_26855_DIVINE_Online_Examination_MS IDENTIFIED BY Divine;
-GRANT DBA TO Tue_26855_DIVINE_Online_Examination_MS;
-GRANT CREATE SESSION TO Tue_26855_DIVINE_Online_Examination_MS;
-GRANT CREATE TABLE TO Tue_26855_DIVINE_Online_Examination_MS;
-GRANT CREATE PROCEDURE TO Tue_26855_DIVINE_Online_Examination_MS;
-GRANT CREATE TRIGGER TO Tue_26855_DIVINE_Online_Examination_MS;
-```
 
 ---
 
