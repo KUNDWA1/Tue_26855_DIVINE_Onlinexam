@@ -118,6 +118,8 @@ flowchart TD
 ---
 
 ## 💾 Database Creation & Implementation
+![Uploading image.png…]()
+
 
 ### 🛠️ Database User Setup
 
